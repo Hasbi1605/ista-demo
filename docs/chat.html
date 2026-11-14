@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en"
+      x-data="{ 
+          darkMode: localStorage.getItem('theme') === 'dark'
+      }" 
+      x-init="$watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light'))"
+      :class="{ 'dark': darkMode }">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="oeYGhMgcjCHOZHYEEYkFVybM3kyGsKU8lhUoMeX8">
+
+        <title>ISTA AI</title>
+        <link rel="icon" type="image/png" href="images/ista/logo.png">
+
+        <link rel="preload" href="build/assets/inter-latin-400-normal-C38fXH4l.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="build/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2" as="font" type="font/woff2" crossorigin>
+
+        <style>
+            ::-webkit-scrollbar { width: 4px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+            .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        </style>
+
+        <!-- Scripts -->
+        <link rel="preload" as="style" href="build/assets/app-BiYcwMRu.css" /><link rel="modulepreload" as="script" href="build/assets/app-BxWRS3jV.js" /><link rel="stylesheet" href="build/assets/app-BiYcwMRu.css" data-navigate-track="reload" /><script type="module" src="build/assets/app-BxWRS3jV.js" data-navigate-track="reload"></script>    <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}[wire\:cloak] {display: none !important;}dialog#livewire-error::backdrop {background-color: rgba(0, 0, 0, .6);}</style>
+</head>
+    <body class="app-viewport font-sans antialiased text-gray-900 bg-[#ffffff] dark:bg-[#020618] dark:text-gray-100 transition-colors duration-200">
+        <script>
+    (() => {
+        const suppressStorageKey = 'ista.globalPageLoader.suppressOnce';
+
+        try {
+            if (window.sessionStorage?.getItem(suppressStorageKey) === '1') {
+                document.documentElement.classList.add('suppress-global-page-loader');
+            }
+        } catch (_) {
+            // ignore storage read errors
+        }
+    })();
+</script>
+
+<style>
+    /* Full screen modern animated overlay */
+    #global-page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        /* Muncull sekejap mata untuk memblocking blank screen (Snap IN) */
+        transition: opacity 0.05s ease-out, visibility 0.05s ease-out;
+    }
+    
+    /* Adapt to Dark Mode natively if the `.dark` class is on html/body */
+    html.dark #global-page-loader, .dark #global-page-loader {
+        background-color: #020618;
+    }
+    
+    #global-page-loader.loader-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        /* Menghilang secara elegan memudar pelan pelan (Fade OUT) */
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html.suppress-global-page-loader #global-page-loader {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    
+    /* Smooth Pulse Animation */
+    @keyframes subtlePulse {
+        0%, 100% { transform: scale(1) translateZ(0); opacity: 1; }
+        50% { transform: scale(1.05) translateZ(0); opacity: 0.8; }
+    }
+    .loader-brand {
+        animation: subtlePulse 2s ease-in-out infinite;
+        will-change: transform, opacity;
+    }
+
+    .loader-slow-hint {
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    #global-page-loader.loader-slow .loader-slow-hint {
+        opacity: 1;
+    }
+    
+    /* Gradient Spinner */
+    .loader-spinner {
+        position: absolute;
+        inset: -12px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #4f46e5; /* ISTA Primary Base */
+        border-right-color: #4f46e5;
+        opacity: 0.8;
+        animation: spin 1s linear infinite;
+        will-change: transform;
+    }
+    html.dark .loader-spinner, .dark .loader-spinner {
+        border-top-color: #818cf8;
+        border-right-color: #818cf8;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg) translateZ(0); }
+        100% { transform: rotate(360deg) translateZ(0); }
+    }
+</style>
+
+<div id="global-page-loader" role="status" aria-live="polite" aria-label="Memuat halaman">
+    <div class="relative flex items-center justify-center mb-6">
+        <!-- Spinner Ring -->
+        <div class="loader-spinner"></div>
+        
+        <!-- Center Logo Image -->
+        <div class="h-16 w-16 md:h-20 md:w-20 bg-white/50 dark:bg-black/20 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md border border-gray-100 dark:border-gray-800 loader-brand">
+            <img src="images/ista/logo.png" alt="ISTA AI" class="h-10 w-10 md:h-12 md:w-12 object-contain drop-shadow-md">
+        </div>
+    </div>
+    
+    <!-- Animated Loading Text -->
+    <div class="flex items-center gap-1 text-[13px] md:text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-[0.15em] uppercase">
+        <span>M</span><span>e</span><span>m</span><span>u</span><span>a</span><span>t</span>
+        <span class="inline-flex gap-0.5 ml-1">
+            <span class="animate-bounce [animation-delay:-0.3s] h-1 w-1 bg-current rounded-full"></span>
+            <span class="animate-bounce [animation-delay:-0.15s] h-1 w-1 bg-current rounded-full"></span>
+            <span class="animate-bounce h-1 w-1 bg-current rounded-full"></span>
+        </span>
+    </div>
+    <p class="loader-slow-hint mt-3 max-w-xs text-center text-xs text-gray-500 dark:text-gray-400">Koneksi lebih lambat dari biasanya. Kami masih menyiapkan halaman.</p>
+</div>
+
+<script>
+    (() => {
+        const suppressStorageKey = 'ista.globalPageLoader.suppressOnce';
+
+        const consumeSuppressLoader = () => {
+            if (window.__suppressGlobalPageLoaderOnce === true) {
+                window.__suppressGlobalPageLoaderOnce = false;
+                return true;
+            }
+
+            try {
+                if (window.sessionStorage?.getItem(suppressStorageKey) === '1') {
+                    window.sessionStorage.removeItem(suppressStorageKey);
+                    return true;
+                }
+            } catch (_) {
+                // ignore storage read errors
+            }
+
+            return false;
+        };
+
+        consumeSuppressLoader();
+
+        if (!window.__globalPageLoaderHandlers) {
+            const showLoader = () => {
+                if (consumeSuppressLoader()) {
+                    return;
+                }
+
+                const loaderEl = document.getElementById('global-page-loader');
+                if (loaderEl) {
+                    loaderEl.classList.remove('loader-hidden');
+                    window.clearTimeout(window.__globalPageLoaderSlowTimer);
+                    window.__globalPageLoaderSlowTimer = window.setTimeout(() => loaderEl.classList.add('loader-slow'), 2500);
+                    loaderEl.removeAttribute('aria-hidden');
+                    loaderEl.setAttribute('role', 'status');
+                }
+            };
+
+            const hideLoader = () => {
+                const loaderEl = document.getElementById('global-page-loader');
+                if (loaderEl) {
+                    window.clearTimeout(window.__globalPageLoaderSlowTimer);
+                    loaderEl.classList.remove('loader-slow');
+                    setTimeout(() => {
+                        loaderEl.classList.add('loader-hidden');
+                        loaderEl.setAttribute('aria-hidden', 'true');
+                        loaderEl.removeAttribute('role');
+                        document.documentElement.classList.remove('suppress-global-page-loader');
+                    }, 150);
+                }
+            };
+
+            const onPageShow = (e) => {
+                if (e.persisted) hideLoader();
+            };
+
+            window.__globalPageLoaderHandlers = {
+                showLoader,
+                hideLoader,
+                onPageShow,
+            };
+
+            // Standard page transitions
+            window.addEventListener('beforeunload', showLoader);
+            window.addEventListener('load', hideLoader);
+
+            // Fallback for BFCache (Back/Forward navigation)
+            window.addEventListener('pageshow', onPageShow);
+
+            // Livewire SPA mode support (wire:navigate)
+            document.addEventListener('livewire:navigating', showLoader);
+            document.addEventListener('livewire:navigated', hideLoader);
+        }
+
+        // Safety fallback (force hide after 8 seconds)
+        setTimeout(window.__globalPageLoaderHandlers.hideLoader, 8000);
+    })();
+</script>
+        <script>
+            (function () {
+                function applyThemeClass() {
+                    if (localStorage.theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+
+                applyThemeClass();
+                document.addEventListener('livewire:navigated', applyThemeClass);
+            })();
+        </script>
+        <main class="app-main-viewport w-full flex">
+            <div wire:snapshot="{&quot;data&quot;:{&quot;q&quot;:&quot;&quot;,&quot;tab&quot;:&quot;chat&quot;,&quot;prompt&quot;:&quot;&quot;,&quot;currentConversationId&quot;:null,&quot;messages&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;conversations&quot;:[null,{&quot;keys&quot;:[],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:null,&quot;s&quot;:&quot;elcln&quot;}],&quot;pendingConversationIds&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;selectedDocuments&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;conversationDocuments&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;availableDocuments&quot;:[null,{&quot;keys&quot;:[],&quot;class&quot;:&quot;Illuminate\\Database\\Eloquent\\Collection&quot;,&quot;modelClass&quot;:null,&quot;s&quot;:&quot;elcln&quot;}],&quot;showDocumentSelector&quot;:false,&quot;sources&quot;:[[],{&quot;s&quot;:&quot;arr&quot;}],&quot;showOlderChats&quot;:false,&quot;webSearchMode&quot;:false,&quot;chatAttachment&quot;:null,&quot;isUploadingAttachment&quot;:false,&quot;attachmentUploadStatus&quot;:null,&quot;attachmentUploadMessage&quot;:&quot;&quot;,&quot;uploadingAttachmentName&quot;:null,&quot;hasDocumentsInProgress&quot;:false,&quot;newMessageId&quot;:null,&quot;preservedStreamMessageId&quot;:null,&quot;streamingConversationId&quot;:null,&quot;memoTabMounted&quot;:false,&quot;prompyTabMounted&quot;:false,&quot;chatShellHydrated&quot;:true,&quot;messagesHasOlder&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;ovV0luCXDmp9hcelR4j4&quot;,&quot;name&quot;:&quot;chat.chat-index&quot;,&quot;path&quot;:&quot;chat&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;6e89092991d659fc498ab614126928f7c7191a3684123b3a6f56e9d657655cf9&quot;}" wire:effects="{&quot;url&quot;:{&quot;q&quot;:{&quot;as&quot;:null,&quot;use&quot;:&quot;replace&quot;,&quot;alwaysShow&quot;:false,&quot;except&quot;:null},&quot;tab&quot;:{&quot;as&quot;:null,&quot;use&quot;:&quot;replace&quot;,&quot;alwaysShow&quot;:false,&quot;except&quot;:null}},&quot;dispatches&quot;:[{&quot;name&quot;:&quot;chat-pending-state-updated&quot;,&quot;params&quot;:{&quot;pendingConversationIds&quot;:[]}}]}" wire:id="ovV0luCXDmp9hcelR4j4" data-ista-chat-shell
+     x-data="chatLayout({ activeTab: $wire.entangle('tab').live, prompyEnabled: true })"
+     x-on:dragenter.window="onDragEnter($event)"
+     x-on:dragover.window="onDragOver($event)"
+     x-on:dragleave.window="onDragLeave($event)"
+     x-on:drop.window="onDropFile($event)"
+     x-on:dragend.window="resetDraggingFile()"
+     x-on:blur.window="resetDraggingFile()"
+     x-on:keydown.escape.window="resetDraggingFile()"
+     x-on:open-sidebar-right.window="showRightSidebar = true"
+     x-on:chat-tab-switch.window="setTab($event.detail?.tab)"
+     x-on:conversation-loading.window="isSwitchingConversation = true"
+     x-on:conversation-loaded.window="isSwitchingConversation = false"
+     class="chat-viewport flex w-full overflow-hidden text-stone-800 dark:text-gray-100 font-sans transition-colors duration-300 relative ista-display-sans bg-stone-50/50 dark:bg-gray-900" style="background-image: url('/images/ista/dashboard-grid.png'); background-size: 8px 8px;"
+>
+    
+    
+    <!--[if BLOCK]><![endif]-->    <div x-show="activeTab === 'chat'" class="flex w-full h-full overflow-hidden">
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        <!-- LEFT SIDEBAR: Chat History -->
+        <aside
+    x-data="chatHistory({ activeConversationId: null, openHistorySections: JSON.parse('{\u0022seven\u0022:false,\u0022thirty\u0022:false,\u0022older\u0022:false}'), historySectionKeys: [], historyTitles: [], pendingConversationIds: [] })"
+    :class="[
+        showLeftSidebar ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full pointer-events-none',
+        isMobile ? 'fixed left-0 top-0 h-full w-[288px] shadow-2xl border-r border-stone-200/60 dark:border-[#1E293B]' : (showLeftSidebar ? 'relative w-[288px] border-r border-stone-200/60 dark:border-[#1E293B]' : 'relative w-0 border-r border-transparent')
+    ]"
+    @click.stop
+    x-on:chat-new-optimistic.window="setActiveConversation(null); loadingConversationId = null"
+    x-on:conversation-activated.window="setActiveConversation($event.detail.id)"
+    class="z-50 flex-shrink-0 overflow-hidden bg-white dark:bg-gray-900 flex flex-col transform-gpu will-change-[width,transform,opacity] transition-[width,transform,opacity,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]">
+
+    <div class="flex items-center justify-between px-4 pb-2 pt-3">
+        <a href="index.html" wire:navigate @click="showLeftSidebar = false" class="inline-flex items-center px-1 py-2.5 font-medium text-[13px] text-gray-700 dark:text-gray-200 hover:text-amber-800 dark:hover:text-amber-300 transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Kembali ke Beranda
+        </a>
+        <button type="button" x-show="isMobile" @click="showLeftSidebar = false" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Tutup sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="p-4 pt-2 pb-5">
+        <a href="chat.html" @click="navigateToNewChat($event); if(isMobile) showLeftSidebar = false;" class="w-full flex items-center justify-start px-4 py-2.5 rounded-lg border border-stone-200/60 dark:border-[#334155] dark:bg-transparent bg-white hover:bg-gray-50 dark:hover:bg-white/5 font-medium text-[13px] text-gray-700 dark:text-gray-200 transition-all duration-200 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-[#64748B] dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 5v14m-7-7h14" />
+            </svg>
+            Chat Baru
+        </a>
+    </div>
+
+    <div class="px-4 pb-4">
+        <div class="relative">
+            <label for="chat-history-search" class="sr-only">Cari riwayat chat</label>
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94A3B8] dark:text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
+            </svg>
+            <input
+                id="chat-history-search"
+                type="search"
+                x-model.debounce.150ms="historySearch"
+                placeholder="Cari riwayat..."
+                class="h-9 w-full rounded-lg border border-stone-200/70 bg-white pl-9 pr-8 text-[12.5px] text-gray-700 outline-none placeholder:text-[#94A3B8] focus:border-ista-primary focus:outline-none focus:ring-2 focus:ring-ista-primary/15 dark:border-[#334155] dark:bg-transparent dark:text-gray-100 dark:placeholder:text-[#64748B]"
+            >
+        </div>
+
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->    </div>
+
+    <div class="flex-1 overflow-y-auto overflow-x-hidden px-4">
+        <!--[if BLOCK]><![endif]-->            
+            
+            <div class="mb-6" data-chat-history-section="today">
+                <!--[if BLOCK]><![endif]-->                    <h3 class="text-[11.6px] font-bold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wider mb-2">Hari Ini</h3>
+                    <ul id="chat-history-section-today" class="space-y-1">
+                <!--[if ENDBLOCK]><![endif]-->                <!--[if BLOCK]><![endif]-->                    <!--[if BLOCK]><![endif]-->                        <li class="rounded-lg border border-dashed border-stone-200/70 px-3 py-3 text-[12px] leading-relaxed text-stone-400 dark:border-gray-800 dark:text-gray-500">
+                            Belum ada percakapan hari ini.
+                        </li>
+                    <!--[if ENDBLOCK]><![endif]-->                <!--[if ENDBLOCK]><![endif]-->            </ul>
+            </div>
+                    
+                        
+                        
+            <!--[if ENDBLOCK]><![endif]-->
+        <div x-show="isSearchingHistory() && !hasHistorySearchResults()" x-transition.opacity class="mb-6 rounded-lg border border-dashed border-stone-200/70 px-3 py-3 text-[12px] leading-relaxed text-stone-400 dark:border-gray-800 dark:text-gray-500" style="display: none;">
+            Tidak ada riwayat yang cocok.
+        </div>
+    </div>
+
+    <div class="px-4 py-6 text-sm flex flex-col gap-2">
+         <a href="profile.html" wire:navigate class="flex items-center gap-3 text-gray-700 dark:text-[#F8FAFC] hover:opacity-80 transition-opacity">
+            <div class="h-8 w-8 rounded bg-ista-primary flex items-center justify-center text-white shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </div>
+            <div>
+                <h4 class="text-[13.1px] font-medium leading-tight">Pengaturan Akun</h4>
+                <p class="text-[11.3px] text-gray-500 dark:text-gray-400">Kelola profil dan preferensi</p>
+            </div>
+         </a>
+    </div>
+</aside>
+        <!-- CENTER MAIN: Chat Area -->
+        <main class="flex-1 flex flex-col relative w-full h-full bg-transparent z-0 overflow-hidden min-w-0">
+
+                <!-- Header for Chat Space -->
+                <div class="h-[61px] flex-shrink-0 flex items-center justify-between px-3 sm:px-6 z-20 border-b border-stone-200/70 dark:border-[#1E293B]/70 backdrop-blur-sm">
+                    <!-- Left toggler and title -->
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <button type="button" @click="showLeftSidebar = !showLeftSidebar" class="p-2 rounded-[10px] hover:bg-[#F1F5F9] dark:hover:bg-gray-800 transition-colors flex-shrink-0" :aria-label="showLeftSidebar ? 'Sembunyikan sidebar chat' : 'Tampilkan sidebar chat'">
+                            <img src="images/icons/collapse-left-light.svg" alt="" class="h-5 w-5 dark:hidden transition-transform duration-300 ease-in-out" :class="showLeftSidebar ? 'rotate-0' : 'rotate-180'" />
+                            <img src="images/icons/collapse-left-dark.svg" alt="" class="h-5 w-5 hidden dark:block transition-transform duration-300 ease-in-out" :class="showLeftSidebar ? 'rotate-0' : 'rotate-180'" />
+                        </button>
+                        <a href="chat.html"
+                           @click="window.chatHistoryNavigateToNewChat?.($event)"
+                           class="group flex items-center gap-2"><div class="ista-brand-title text-xl text-ista-primary not-italic transition-transform duration-300 group-hover:scale-105">ISTA <span class="font-light italic text-ista-gold">AI</span></div></a>
+                    </div>
+
+                    <!-- Center: Tab Toggle -->
+                    <div class="flex items-center">
+                        <div class="chat-mode-toggle inline-flex items-center rounded-full border border-stone-200/80 bg-white/80 p-1 shadow-sm backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/80" role="tablist" aria-label="Pilih mode chat, memo, atau Prompy">
+    <button
+        type="button"
+        @click="$dispatch('chat-tab-switch', { tab: 'chat' })"
+        role="tab"
+        id="chat-mode-tab"
+        aria-controls="chat-mode-panel"
+        :aria-selected="activeTab === 'chat' ? 'true' : 'false'"
+        :tabindex="activeTab === 'chat' ? 0 : -1"
+        aria-label="Buka tab chat"
+        :class="activeTab === 'chat'
+            ? 'bg-ista-primary text-white shadow-sm'
+            : 'text-stone-500 hover:text-stone-700 dark:text-gray-400 dark:hover:text-gray-200'"
+        class="chat-mode-tab inline-flex items-center rounded-full px-2.5 py-1.5 text-[13px] font-semibold transition-all duration-200"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span class="chat-mode-tab-label">Chat</span>
+    </button>
+    <button
+        type="button"
+        @click="$dispatch('chat-tab-switch', { tab: 'memo' })"
+        role="tab"
+        id="memo-mode-tab"
+        aria-controls="memo-mode-panel"
+        :aria-selected="activeTab === 'memo' ? 'true' : 'false'"
+        :tabindex="activeTab === 'memo' ? 0 : -1"
+        aria-label="Buka tab memo"
+        :class="activeTab === 'memo'
+            ? 'bg-ista-primary text-white shadow-sm'
+            : 'text-stone-500 hover:text-stone-700 dark:text-gray-400 dark:hover:text-gray-200'"
+        class="chat-mode-tab inline-flex items-center rounded-full px-2.5 py-1.5 text-[13px] font-semibold transition-all duration-200"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <span class="chat-mode-tab-label">Memo</span>
+    </button>
+    <!--[if BLOCK]><![endif]-->    <button
+        type="button"
+        @click="$dispatch('chat-tab-switch', { tab: 'prompy' })"
+        role="tab"
+        id="prompy-mode-tab"
+        aria-controls="prompy-mode-panel"
+        :aria-selected="activeTab === 'prompy' ? 'true' : 'false'"
+        :tabindex="activeTab === 'prompy' ? 0 : -1"
+        aria-label="Buka tab Prompy"
+        :class="activeTab === 'prompy'
+            ? 'bg-ista-primary text-white shadow-sm'
+            : 'text-stone-500 hover:text-stone-700 dark:text-gray-400 dark:hover:text-gray-200'"
+        class="chat-mode-tab inline-flex items-center rounded-full px-2.5 py-1.5 text-[13px] font-semibold transition-all duration-200"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        <span class="chat-mode-tab-label">Prompy</span>
+    </button>
+    <!--[if ENDBLOCK]><![endif]--></div>                    </div>
+
+                    <!-- Right toggles -->
+                    <div class="flex items-center gap-1 sm:gap-3">
+                        <!-- Theme Toggle Button -->
+                        <button type="button" @click="darkMode = !darkMode" :aria-pressed="darkMode ? 'true' : 'false'" class="p-2 rounded-[10px] hover:bg-[#F1F5F9] dark:hover:bg-gray-800 transition-colors" aria-label="Ubah tema gelap">
+                            <svg x-show="darkMode === false" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#64748B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v2.5M12 18.5V21M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M3 12h2.5M18.5 12H21M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8M12 16a4 4 0 100-8 4 4 0 000 8z" />
+                            </svg>
+                            <svg x-show="darkMode === true" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" />
+                            </svg>
+                        </button>
+
+                        <button type="button" @click="showRightSidebar = !showRightSidebar" class="p-2 rounded-[10px] hover:bg-[#F1F5F9] dark:hover:bg-gray-800 transition-colors flex-shrink-0" :aria-label="showRightSidebar ? 'Sembunyikan sidebar dokumen' : 'Tampilkan sidebar dokumen'">
+                            <img src="images/icons/collapse-right-light.svg" alt="" class="h-5 w-5 dark:hidden transition-transform duration-300 ease-in-out" :class="showRightSidebar ? 'rotate-0' : 'rotate-180'" />
+                            <img src="images/icons/collapse-right-dark.svg" alt="" class="h-5 w-5 hidden dark:block transition-transform duration-300 ease-in-out" :class="showRightSidebar ? 'rotate-0' : 'rotate-180'" />
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages List -->
+                <div x-data="chatMessages"
+     class="mx-auto min-h-0 w-full max-w-4xl flex-1 overflow-y-auto px-3 py-5 sm:px-6 sm:py-7 space-y-6 sm:space-y-8"
+     x-ref="chatBox"
+     data-chat-box
+     x-on:message-streamed.window="scrollToBottom()"
+     x-on:message-send.window="optimisticUserMessage = $event.detail.text; isSwitchingConversation = false; startStreamingPlaceholder($event.detail.loadingContext || 'general'); scrollToBottom(false, true)"
+     x-on:conversation-loading.window="isSwitchingConversation = true; optimisticUserMessage = ''; resetStreamingState()"
+     x-on:conversation-loaded.window="isSwitchingConversation = false; resetStreamingState(); $nextTick(() => { maybeRestorePendingPlaceholder(); scrollToBottom(false, true); })"
+     data-chat-messages-ready="true">
+    <div class="hidden"
+         data-chat-conversation-id=""
+         data-chat-last-message-role=""
+         data-chat-last-user-message-id=""
+         data-chat-last-user-message-created-at=""
+         data-chat-last-assistant-message-id=""
+         aria-hidden="true"></div>
+    <!--[if BLOCK]><![endif]-->        <div x-show="!optimisticUserMessage && !isSwitchingConversation" x-transition.opacity class="h-full flex flex-col items-center justify-center text-center">
+            <div class="h-16 w-16 mb-6">
+                <img src="images/ista/logo.png" alt="ISTA AI" class="h-full w-full object-contain" />
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">ISTA AI</h2>
+            <p class="text-gray-500 dark:text-[#94A3B8] text-[14px] max-w-md">
+                Mulai percakapan baru untuk meminta ringkasan, informasi, atau bantuan kerja.
+            </p>
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-xl px-2">
+                <!--[if BLOCK]><![endif]-->                    <button type="button"
+                            @click="$dispatch('chat-apply-suggestion', { text: 'Ringkas isi dokumen keputusan presiden terbaru' })"
+                            class="rounded-full border border-stone-200/80 bg-white/90 px-3.5 py-1.5 text-[12px] font-medium text-stone-600 transition-colors hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:text-amber-200">
+                        Ringkas isi dokumen keputusan presiden terbaru
+                    </button>
+                                    <button type="button"
+                            @click="$dispatch('chat-apply-suggestion', { text: 'Buatkan poin-poin rapat internal singkat' })"
+                            class="rounded-full border border-stone-200/80 bg-white/90 px-3.5 py-1.5 text-[12px] font-medium text-stone-600 transition-colors hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:text-amber-200">
+                        Buatkan poin-poin rapat internal singkat
+                    </button>
+                                    <button type="button"
+                            @click="$dispatch('chat-apply-suggestion', { text: 'Jelaskan prosedur tata naskah dinas resmi' })"
+                            class="rounded-full border border-stone-200/80 bg-white/90 px-3.5 py-1.5 text-[12px] font-medium text-stone-600 transition-colors hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:text-amber-200">
+                        Jelaskan prosedur tata naskah dinas resmi
+                    </button>
+                                    <button type="button"
+                            @click="$dispatch('chat-apply-suggestion', { text: 'Bantu susun draft memo undangan kegiatan' })"
+                            class="rounded-full border border-stone-200/80 bg-white/90 px-3.5 py-1.5 text-[12px] font-medium text-stone-600 transition-colors hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-300 dark:hover:text-amber-200">
+                        Bantu susun draft memo undangan kegiatan
+                    </button>
+                <!--[if ENDBLOCK]><![endif]-->            </div>
+        </div>
+    <!--[if ENDBLOCK]><![endif]-->
+    <div x-show="isSwitchingConversation" x-transition.opacity class="px-2 sm:px-8" role="status" aria-live="polite" style="display: none;">
+        <span class="sr-only">Memuat chat.</span>
+        <div class="inline-flex items-center gap-1.5 rounded-full border border-stone-200/70 bg-white/75 px-3 py-2 text-stone-400 shadow-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/75 dark:text-gray-500" aria-hidden="true">
+            <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-current [animation-delay:-0.2s]"></span>
+            <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-current [animation-delay:-0.1s]"></span>
+            <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-current"></span>
+        </div>
+    </div>
+
+    <template x-if="optimisticUserMessage">
+        <div class="flex justify-end">
+            <div class="w-full sm:max-w-3xl flex items-start gap-4 px-2 sm:px-8 flex-row-reverse">
+                <div class="shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-[#E2E8F0] dark:bg-white text-[#62748E] dark:text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m12-10a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <div class="flex max-w-[calc(100%-2.5rem)] flex-col gap-1 items-end text-right">
+                    <div class="flex items-center gap-2 mb-1 justify-end">
+                        <span class="text-[13px] font-bold text-stone-800 dark:text-[#F8FAFC]">Anda</span>
+                    </div>
+                    <div class="inline-block w-fit max-w-[656px] min-w-0 rounded-2xl rounded-br-sm bg-ista-primary px-4 py-3 text-[14.5px] leading-relaxed text-white shadow-sm">
+                        <p class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]" x-text="optimisticUserMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div
+        class="flex justify-start"
+        x-show="streaming"
+        x-ref="streamingMessage">
+        <div class="w-full sm:max-w-3xl flex items-start gap-2 sm:gap-4 px-0 sm:px-8">
+            <div class="shrink-0 h-8 w-8 rounded-full flex items-center justify-center bg-white border border-stone-200 shadow-sm p-1">
+                <img src="images/ista/logo.png" alt="ISTA AI" class="h-full w-full object-contain" />
+            </div>
+            <div class="flex flex-col gap-1 min-w-0 w-full items-start text-left">
+                <div class="flex items-center gap-2 mb-1 justify-start">
+                    <span class="text-[13px] font-bold text-stone-800 dark:text-[#F8FAFC]">ISTA AI</span>
+                    <span x-show="streamingTimeLabel" class="text-[10px] text-gray-400 dark:text-[#64748B]" x-text="streamingTimeLabel"></span>
+                </div>
+                <div
+                    x-data="chatAnswerActions({
+                        messageId: () => streamedAssistantMessageId,
+                        html: () => streamingHtml,
+                        exportUrl: 'http:\/\/127.0.0.1:8902\/documents\/export',
+                        exportFileName: () => streamedAssistantMessageId ? `ista-ai-jawaban-${streamedAssistantMessageId}` : 'ista-ai-export',
+                    })"
+                    :data-answer-message-id="streamedAssistantMessageId || null"
+                    class="w-full max-w-[656px]"
+                >
+                    <div class="rounded-2xl rounded-bl-sm bg-white/80 backdrop-blur-sm dark:bg-gray-800 border border-stone-200/60 dark:border-gray-800 px-4 py-3 text-[14.5px] leading-relaxed text-stone-700 dark:text-gray-100 prose prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-li:my-0 prose-li:marker:text-stone-800 prose-a:text-sky-700 prose-a:decoration-sky-600/80 hover:prose-a:text-sky-800 dark:prose-headings:text-white dark:prose-p:text-gray-100 dark:prose-strong:text-white dark:prose-ul:text-gray-100 dark:prose-ol:text-gray-100 dark:prose-li:text-gray-100 dark:prose-li:marker:text-white dark:prose-a:text-sky-300 dark:prose-a:decoration-sky-300/90 dark:hover:prose-a:text-sky-200 pb-1"
+                         :class="streamingText === '' ? 'inline-flex items-center w-auto' : ''"
+                         x-ref="streamingAnswerBubble"
+                         role="status"
+                         aria-live="polite">
+                        <div x-show="streamingText === ''" class="inline-flex items-center gap-2.5 py-1">
+                            <span class="relative inline-flex h-4 w-4 items-center justify-center">
+                                <span class="absolute inset-0 animate-spin" style="animation-duration: 2.8s; animation-timing-function: linear;">
+                                    <span class="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-gray-400/90 dark:bg-[#64748B]"></span>
+                                    <span class="absolute left-[12%] top-[62%] h-1.5 w-1.5 rounded-full bg-gray-400/75 dark:bg-[#64748B]/90"></span>
+                                    <span class="absolute right-[12%] top-[62%] h-1.5 w-1.5 rounded-full bg-gray-400/60 dark:bg-[#64748B]/80"></span>
+                                </span>
+                                <span class="absolute left-1/2 top-0 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-gray-500/90 dark:bg-[#94A3B8] animate-pulse" style="animation-duration: 1.3s;"></span>
+                                <span class="absolute left-[12%] top-[62%] h-1.5 w-1.5 rounded-full bg-gray-500/80 dark:bg-[#94A3B8]/90 animate-pulse" style="animation-duration: 1.5s; animation-delay: 0.12s;"></span>
+                                <span class="absolute right-[12%] top-[62%] h-1.5 w-1.5 rounded-full bg-gray-500/70 dark:bg-[#94A3B8]/80 animate-pulse" style="animation-duration: 1.7s; animation-delay: 0.24s;"></span>
+                            </span>
+                            <span class="ista-loading-shimmer ista-label-enter text-[12px] font-medium whitespace-nowrap"
+                                  x-text="loadingPhase"
+                                  x-effect="
+                                      loadingPhaseKey;
+                                      $el.classList.remove('ista-label-enter');
+                                      void $el.offsetWidth;
+                                      $el.classList.add('ista-label-enter');
+                                  "
+                            ></span>
+                        </div>
+                        <div x-show="streamingText !== ''" class="break-words [overflow-wrap:anywhere]" x-html="streamingHtml"></div>
+                    </div>
+                    <p x-show="stalePendingWarning" x-transition.opacity class="mt-2 max-w-[656px] rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] font-medium text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100" role="status" aria-live="polite" x-text="stalePendingWarning"></p>
+
+                    <div
+                        x-show="streamingActionsReady && streamedAssistantMessageId && streamingText !== ''"
+                        x-transition.opacity
+                        style="display: none;"
+                    >
+                        <div data-answer-actions class="mt-2 flex flex-wrap items-center gap-1 text-[12px] text-[#64748B] dark:text-[#94A3B8]">
+    <button
+        type="button"
+        @click="regenerateAnswer()"
+        title="Coba lagi"
+        aria-label="Coba lagi"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/80 hover:text-stone-900 dark:hover:bg-gray-800/80 dark:hover:text-gray-100"
+    >
+        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3 12a9 9 0 0 1 15.6-6.3L21 8" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M21 3v5h-5" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M21 12a9 9 0 0 1-15.6 6.3L3 16" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M3 21v-5h5" />
+        </svg>
+        <span class="sr-only">Coba lagi</span>
+    </button>
+
+    <button
+        type="button"
+        @click="copyToClipboard()"
+        :title="copyStatusLabel()"
+        :aria-label="copyStatusLabel()"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/80 hover:text-stone-900 dark:hover:bg-gray-800/80 dark:hover:text-gray-100"
+        >
+        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        <span class="sr-only" x-text="copyStatusLabel()">Salin</span>
+    </button>
+    <span
+        x-show="copied"
+        x-transition.opacity.duration.150ms
+        class="inline-flex h-7 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 text-[11px] font-medium text-emerald-700 shadow-sm dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200"
+        style="display: none;"
+        role="status"
+        aria-live="polite"
+    >
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m5 12 4 4L19 6" />
+        </svg>
+        Tersalin
+    </span>
+
+    <button
+        type="button"
+        @click="shareToWhatsApp()"
+        title="Bagikan ke WhatsApp"
+        aria-label="Bagikan ke WhatsApp"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/80 hover:text-stone-900 dark:hover:bg-gray-800/80 dark:hover:text-gray-100"
+    >
+        <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+        </svg>
+        <span class="sr-only">Bagikan ke WhatsApp</span>
+    </button>
+
+    <div class="relative" x-on:click.outside="exportMenuOpen = false">
+        <button
+            type="button"
+            @click="toggleExportMenu()"
+            :disabled="exportLoading"
+            :title="exportLoading ? 'Menyiapkan ekspor' : 'Ekspor'"
+            :aria-label="exportLoading ? 'Menyiapkan ekspor' : 'Ekspor'"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-lg transition hover:bg-white/80 hover:text-stone-900 disabled:cursor-wait disabled:opacity-70 dark:hover:bg-gray-800/80 dark:hover:text-gray-100"
+            >
+            <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M12 15V3" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" d="m7 10 5 5 5-5" />
+            </svg>
+            <span class="sr-only" x-text="exportLoading ? 'Menyiapkan ekspor' : 'Ekspor'">Ekspor</span>
+        </button>
+
+        <div
+            x-show="exportMenuOpen"
+            x-transition.opacity
+            class="absolute left-0 z-20 mt-2 w-44 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800"
+            style="display: none;"
+        >
+            <button
+                type="button"
+                @click="exportAs('pdf')"
+                class="flex w-full items-center justify-between px-4 py-2.5 text-left text-[12px] text-stone-700 transition hover:bg-stone-50 dark:text-gray-100 dark:hover:bg-gray-700/80"
+            >
+                <span>PDF</span>
+                <span class="text-[10px] text-[#64748B] dark:text-[#94A3B8]">Laporan</span>
+            </button>
+            <button
+                type="button"
+                @click="exportAs('docx')"
+                class="flex w-full items-center justify-between px-4 py-2.5 text-left text-[12px] text-stone-700 transition hover:bg-stone-50 dark:text-gray-100 dark:hover:bg-gray-700/80"
+            >
+                <span>DOCX</span>
+                <span class="text-[10px] text-[#64748B] dark:text-[#94A3B8]">Word</span>
+            </button>
+            <button
+                type="button"
+                @click="exportAs('xlsx')"
+                class="flex w-full items-center justify-between px-4 py-2.5 text-left text-[12px] text-stone-700 transition hover:bg-stone-50 dark:text-gray-100 dark:hover:bg-gray-700/80"
+            >
+                <span>XLSX</span>
+                <span class="text-[10px] text-[#64748B] dark:text-[#94A3B8]">Sheet</span>
+            </button>
+            <button
+                type="button"
+                @click="exportAs('csv')"
+                class="flex w-full items-center justify-between px-4 py-2.5 text-left text-[12px] text-stone-700 transition hover:bg-stone-50 dark:text-gray-100 dark:hover:bg-gray-700/80"
+            >
+                <span>CSV</span>
+                <span class="text-[10px] text-[#64748B] dark:text-[#94A3B8]">Tabel</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<p x-show="exportError" x-transition.opacity class="mt-1 text-[11px] text-rose-500" x-text="exportError"></p>                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button
+        type="button"
+        x-show="showJumpToLatest"
+        x-transition.opacity
+        @click="jumpToLatest()"
+        title="Ke pesan terbaru"
+        aria-label="Ke pesan terbaru"
+        class="sticky bottom-3 left-1/2 z-20 inline-flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-stone-200/80 bg-white/95 text-stone-600 shadow-lg backdrop-blur-sm transition hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-700 dark:bg-gray-900/95 dark:text-gray-200 dark:hover:text-amber-200"
+        style="display: none;"
+    >
+        <span aria-hidden="true" class="text-base leading-none">↓</span>
+    </button>
+</div>
+                <!-- Input Area (Composer) -->
+                <div x-data="chatComposer({
+        prompt: '',
+        webSearchMode: $wire.entangle('webSearchMode'),
+        conversationDocuments: $wire.entangle('conversationDocuments'),
+        availableDocuments: [],
+        maxDocumentsPerUser: 10,
+        userDocumentCount: 0,
+    })"
+     x-on:show-drop-error.window="sendError = $event.detail.message"
+     x-on:chat-files-drop.window="handleDroppedFiles($event)"
+     x-on:chat-apply-suggestion.window="applySuggestion($event.detail.text)"
+     x-on:conversation-documents-preview.window="previewConversationDocuments($event)"
+     class="chat-composer-safe mx-auto w-full max-w-4xl shrink-0 px-3 pt-1 sm:px-6 bg-transparent"
+>
+    <input
+        x-ref="chatAttachmentInput"
+        type="file"
+        accept=".pdf,.docx,.xlsx,.csv"
+        multiple
+        class="hidden"
+        x-on:change="handleAttachmentPickerChange($event)"
+    >
+    <form x-on:submit.prevent="submitPrompt($event)" class="chat-form max-w-3xl mx-auto relative rounded-[1.35rem] border border-stone-200/70 bg-white/[0.82] shadow-[0_18px_50px_-32px_rgba(15,23,42,0.55)] backdrop-blur-xl transition-colors dark:border-gray-700/80 dark:bg-gray-800/[0.82]" action="#">
+        <div class="flex flex-col w-full">
+            <!-- Error Notification -->
+            <div x-show="sendError" x-transition class="absolute -top-14 left-0 right-0 z-30">
+                <div class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-[12px] text-rose-800 shadow-sm flex items-center justify-between gap-2">
+                    <span x-text="sendError"></span>
+                    <button type="button" @click="sendError = ''" class="text-rose-400 hover:text-rose-600" aria-label="Tutup pesan error">
+                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div x-show="attachmentQueueProcessing" x-cloak class="px-5 pt-4 flex items-center gap-2 text-[12px] text-ista-primary dark:text-[#8E81FF]">
+                <span class="h-2 w-2 rounded-full bg-current animate-pulse"></span>
+                <span x-text="attachmentQueueTotal > 1 ? `Mengunggah ${attachmentQueueIndex}/${attachmentQueueTotal}: ${attachmentQueueLabel}` : `Mengunggah lampiran: ${attachmentQueueLabel}`"></span>
+            </div>
+
+            <div wire:loading.flex wire:target="chatAttachment" class="px-5 pt-4 items-center gap-2 text-[12px] text-ista-primary dark:text-[#8E81FF]">
+                <span class="h-2 w-2 rounded-full bg-current animate-ping"></span>
+                <span>Mengunggah lampiran...</span>
+            </div>
+
+            <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->            <div x-show="chatDocuments().length > 0" class="px-5 pt-5 pb-1 flex flex-wrap gap-3" style="display: none;">
+                <template x-for="doc in chatDocuments()" :key="doc.id">
+                    <span class="inline-flex items-center gap-2 bg-[#E2E8F0] dark:bg-gray-700 dark:border dark:border-gray-600 text-[#314158] dark:text-gray-100 rounded-2xl px-4 py-2 text-[14px]">
+                        <template x-if="documentIconType(doc) === 'pdf'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#FF2056]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                        </template>
+                        <template x-if="documentIconType(doc) === 'xlsx'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="#32CD32"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zm7 1v4h4M8 13h8M8 17h8" /></svg>
+                        </template>
+                        <template x-if="documentIconType(doc) === 'docx'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#2B7FFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zm7 1v4h4M8 13h8M8 17h6" /></svg>
+                        </template>
+                        <template x-if="documentIconType(doc) === 'file'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zm7 1v4h4" />
+                            </svg>
+                        </template>
+                        <span class="max-w-[180px] truncate" x-text="doc.name"></span>
+                        <button type="button" @click="removeConversationDocument(doc.id)" class="text-[#7C8DA8] hover:text-[#314158] dark:text-gray-300 dark:hover:text-white" title="Lepas dokumen" :aria-label="`Lepas dokumen ${doc.name}`">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </span>
+                </template>
+            </div>
+            <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->            <div x-show="!isDraggingFile" class="px-3 pb-3 pt-3 w-full">
+                <textarea
+                    x-ref="chatInput"
+                    x-model="promptDraft"
+                    x-on:keydown.enter="handleEnterKey($event)"
+                    x-on:input="autoResizeTextarea($el)"
+                    placeholder="Tulis pertanyaan atau arahan kerja Anda..."
+                    class="chat-input w-full max-h-[200px] min-h-[44px] bg-transparent border-none focus:ring-0 focus:outline-none focus:border-transparent focus-visible:ring-0 focus-visible:outline-none resize-none text-[14.5px] text-stone-800 dark:text-[#F8FAFC] placeholder-[#94A3B8] dark:placeholder-[#64748B] px-2 py-[10px] hover:bg-transparent focus:bg-transparent"
+                    rows="1"
+                    style="outline: none !important; box-shadow: none !important;"
+                ></textarea>
+
+                <div class="flex items-center justify-between mt-2">
+                    <button type="button"
+                            @click="webSearchMode = !webSearchMode"
+                            :aria-pressed="webSearchMode ? 'true' : 'false'"
+                            :class="webSearchMode ? 'bg-blue-50 dark:bg-blue-500/10 border border-blue-400 dark:border-blue-500 text-blue-600 dark:text-blue-400' : 'bg-transparent border border-stone-200 dark:border-[#334155] text-[#62748E] dark:text-[#94A3B8]'"
+                            class="h-[30px] px-[13px] rounded-full text-[11.4px] font-normal flex items-center gap-[6px] transition-all duration-300">
+                        <svg class="w-[14px] h-[14px] text-current" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 12.8333C10.2217 12.8333 12.8333 10.2217 12.8333 7C12.8333 3.77834 10.2217 1.16667 7 1.16667C3.77834 1.16667 1.16667 3.77834 1.16667 7C1.16667 10.2217 3.77834 12.8333 7 12.8333Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 1.16667C5.50214 2.73942 4.66667 4.8281 4.66667 7C4.66667 9.1719 5.50214 11.2606 7 12.8333C8.49786 11.2606 9.33333 9.1719 9.33333 7C9.33333 4.8281 8.49786 2.73942 7 1.16667Z" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1.16667 7H12.8333" stroke="currentColor" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Web</span>
+                    </button>
+
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" @click="openAttachmentPicker()" wire:loading.attr="disabled" wire:target="chatAttachment" class="h-[34px] w-[34px] rounded-full transition-colors flex items-center justify-center bg-transparent hover:bg-[#F1F5F9] dark:hover:bg-gray-800 disabled:opacity-60" title="Lampirkan file" aria-label="Lampirkan file PDF, DOCX, XLSX, atau CSV">
+                            <img src="images/icons/upload-light.svg" alt="" class="h-[18px] w-[18px] dark:hidden" />
+                            <img src="images/icons/upload-dark.svg" alt="" class="h-[18px] w-[18px] hidden dark:block" />
+                        </button>
+
+                        <button type="submit"
+                                :disabled="isSendingMessage && !isStreamingAnswer"
+                                class="bg-ista-primary hover:bg-ista-dark dark:bg-ista-primary dark:hover:bg-ista-dark disabled:opacity-50 rounded-full transition-all duration-300 h-[32px] w-[32px] flex items-center justify-center group"
+                                :aria-label="isStreamingAnswer ? 'Hentikan generasi' : (isSendingMessage ? 'Mengirim pesan' : 'Kirim pesan')">
+                            <span x-show="isSendingMessage && !isStreamingAnswer" class="h-[17px] w-[17px] rounded-full border-2 border-white/70 border-t-transparent animate-spin" aria-hidden="true"></span>
+                            <svg x-show="isStreamingAnswer" xmlns="http://www.w3.org/2000/svg" class="h-[14px] w-[14px] text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <rect x="7" y="7" width="10" height="10" rx="1.5" />
+                            </svg>
+                            <img x-show="!isSendingMessage && !isStreamingAnswer" src="images/icons/send-light.svg" alt="" class="h-[17px] w-[17px] dark:hidden brightness-0 invert" />
+                            <img x-show="!isSendingMessage && !isStreamingAnswer" src="images/icons/send-dark.svg" alt="" class="h-[17px] w-[17px] hidden dark:block brightness-0 invert" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div x-show="isDraggingFile" x-cloak x-transition.opacity class="px-3 pb-3 pt-3 w-full">
+                <div class="h-[84px] w-full rounded-xl border-2 border-dashed border-ista-primary/40 dark:border-[#8E81FF] bg-ista-primary/5 dark:bg-[#312E81]/20 flex items-center justify-center gap-2 text-[13px] font-semibold text-ista-primary dark:text-[#A5B4FC]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    Seret hingga 5 dokumen ke sini untuk mengunggah
+                </div>
+            </div>
+        </div>
+    </form>
+    <p x-show="dropError" x-cloak x-transition.opacity class="max-w-3xl mx-auto mt-2 text-xs text-red-500 dark:text-red-400" x-text="dropError"></p>
+    <div class="text-center mt-3 text-[11px] text-[#94A3B8] dark:text-[#64748B]">
+        ISTA AI dapat keliru. Mohon verifikasi kembali informasi yang penting.
+    </div>
+</div>
+        </main>
+
+        <!-- RIGHT SIDEBAR: Documents -->
+        <aside
+    :class="[
+        showRightSidebar ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none',
+        isMobile ? 'fixed right-0 top-0 h-full w-[288px] shadow-2xl border-l border-stone-200/60 dark:border-[#1E293B]' : (showRightSidebar ? 'relative w-[288px] border-l border-stone-200/60 dark:border-[#1E293B]' : 'relative w-0 border-l border-transparent')
+    ]"
+    @click.stop
+    class="z-50 flex-shrink-0 overflow-hidden bg-white dark:bg-gray-900 flex flex-col transform-gpu will-change-[width,transform,opacity] transition-[width,transform,opacity,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]">
+
+    <div class="px-4 pt-5 pb-0 flex items-center justify-between">
+        <span class="inline-flex items-center font-medium text-[13px] text-gray-700 dark:text-gray-200">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+            Semua Dokumen Saya
+        </span>
+        <button type="button" x-show="isMobile" @click="showRightSidebar = false" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Tutup sidebar dokumen">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="px-4 pt-4 space-y-2">
+        <div wire:loading.flex wire:target="deleteDocument,deleteSelectedDocuments" class="items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11.5px] text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+            <span class="h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent animate-spin"></span>
+            <span>Menghapus dokumen...</span>
+        </div>
+
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->    </div>
+
+    
+    <div class="flex-1 overflow-y-auto px-4 pt-4"  wire:poll.20s="loadAvailableDocuments" >
+          <div class="mb-4">
+                             <div wire:key="chat-document-selector-d751713988987e9331980363e24189ce" x-data="chatDocumentSelector({ selectedDocuments: $wire.entangle('selectedDocuments'), readyDocumentIds: [], availableDocuments: [] })">
+              <div class="flex items-center flex-nowrap gap-1 mb-4 px-1 pb-3 border-b border-stone-200/60/70 dark:border-gray-800/70">
+                  <button type="button" @click="toggleSelectAllDocuments()" :aria-pressed="allDocumentsSelected() ? 'true' : 'false'" class="inline-flex items-center gap-1.5 text-[#62748E] dark:text-[#90A1B9] hover:text-[#314158] dark:hover:text-white text-[11px] leading-[1.1] font-semibold px-1.5 py-1 rounded-md hover:bg-[#F1F5F9] dark:hover:bg-gray-800 transition-colors whitespace-nowrap">
+                      <span x-show="allDocumentsSelected()" class="inline-flex items-center gap-1.5" style="display: none;">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-ista-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <rect x="3" y="3" width="18" height="18" rx="4" stroke-width="2"></rect>
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12.5l2.8 2.8L16.8 9.3" />
+                          </svg>
+                           Batal
+                      </span>
+                      <span x-show="!allDocumentsSelected()" class="inline-flex items-center gap-1.5" style="">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#64748B] dark:text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <rect x="3" y="3" width="18" height="18" rx="4" stroke-width="2"></rect>
+                          </svg>
+                           Semua
+                      </span>
+                  </button>
+                      <span x-show="selectedInAvailableCount() > 0" class="ml-auto shrink-0 text-[10.5px] font-semibold text-[#7C8DA8] dark:text-[#90A1B9]" style="display: none;">
+                          <span x-text="selectedInAvailableCount()">0</span> dipilih
+                      </span>
+                      <button type="button" x-show="selectedInAvailableCount() > 0" @click="deleteSelectedDocuments()" wire:loading.attr="disabled" wire:target="deleteSelectedDocuments" class="inline-flex h-7 w-7 shrink-0 items-center justify-center text-[#FF2056] rounded-md bg-[#FF2056]/10 hover:bg-[#FF2056]/20 transition-colors disabled:opacity-60" title="Hapus dokumen terpilih" aria-label="Hapus dokumen terpilih" style="display: none;">
+                          <svg wire:loading.remove wire:target="deleteSelectedDocuments" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          <span wire:loading.inline-flex wire:target="deleteSelectedDocuments" class="h-3 w-3 rounded-full border border-current border-t-transparent animate-spin"></span>
+                      </button>
+                      <button type="button" x-show="selectedInAvailableCount() > 0" @click="addSelectedDocumentsToChat().then(() => { if (isMobile) showRightSidebar = false; })" wire:loading.attr="disabled" wire:target="addSelectedDocumentsToChat" class="inline-flex h-7 shrink-0 items-center gap-1 rounded-md bg-ista-primary px-2.5 text-[10.5px] font-semibold text-white transition-all hover:bg-stone-800 whitespace-nowrap disabled:opacity-60" title="Tambahkan dokumen terpilih ke chat" aria-label="Tambahkan dokumen terpilih ke chat" style="display: none;">
+                          <svg wire:loading.remove wire:target="addSelectedDocumentsToChat" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                          </svg>
+                          <span wire:loading.inline-flex wire:target="addSelectedDocumentsToChat" class="h-3 w-3 rounded-full border border-white/70 border-t-transparent animate-spin" aria-hidden="true"></span>
+                           <span wire:loading.remove wire:target="addSelectedDocumentsToChat">Pakai</span>
+                      </button>
+              </div>
+
+              <!--[if BLOCK]><![endif]-->                  <p class="text-[12px] text-gray-400 mt-6 px-1">Belum ada dokumen. Unggah PDF/DOCX/XLSX/CSV untuk menambahkan konteks chat.</p>
+              <!--[if ENDBLOCK]><![endif]-->              </div>
+          </div>
+    </div>
+</aside>    </div>
+    <!--[if ENDBLOCK]><![endif]-->
+    
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+    
+    <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+    <!-- Drag & Drop Overlay Visual -->
+    <div x-show="isDraggingFile" x-cloak x-transition.opacity class="fixed inset-0 z-[60] bg-ista-primary/10 backdrop-blur-[2px] flex items-center justify-center pointer-events-none">
+        <div class="h-[120px] w-[320px] rounded-2xl border-2 border-dashed border-ista-primary bg-white/90 dark:bg-gray-900/90 shadow-2xl flex flex-col items-center justify-center gap-3 scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-ista-primary animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <span class="text-[15px] font-bold text-ista-primary">Seret hingga 5 dokumen untuk upload</span>
+        </div>
+    </div>
+
+    <!-- Unified Mobile Backdrop -->
+    <div
+        x-show="isMobile && (showLeftSidebar || showRightSidebar)"
+        x-transition.opacity
+        @click="showLeftSidebar = false; showRightSidebar = false;"
+        class="fixed inset-0 bg-black/50 z-40"
+        style="display:none;"
+    ></div>
+
+</div>
+        </main>
+        <div wire:snapshot="{&quot;data&quot;:{&quot;documentId&quot;:null,&quot;isOpen&quot;:false},&quot;memo&quot;:{&quot;id&quot;:&quot;8jlAv3LgYXqHYoYZLtBp&quot;,&quot;name&quot;:&quot;documents.document-viewer&quot;,&quot;path&quot;:&quot;chat&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;dea86c9b43ca2b5279ce7a9dc1b5b43a31e1fa5c90452cd100bb2d048236c488&quot;}" wire:effects="[]" wire:id="8jlAv3LgYXqHYoYZLtBp" x-data="documentViewer({ isOpen: false })"
+     x-on:open-document-preview.window="open($event.detail.documentId)">
+        <div x-show="isVisible"
+             x-transition.opacity
+             class="fixed inset-0 z-[60] flex items-center justify-center px-4 py-6 sm:px-6 lg:px-8"
+             style="display: none;"
+             role="dialog" aria-modal="true" aria-labelledby="document-viewer-title">
+            <div class="absolute inset-0 bg-gray-900/70 backdrop-blur-sm"
+                 @click="close()"
+                 aria-hidden="true"></div>
+
+            <div class="relative w-full max-w-5xl max-h-[90vh] flex flex-col bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-stone-200 dark:border-[#1E293B] overflow-hidden">
+                <div class="flex items-center justify-between gap-3 px-5 py-4 border-b border-stone-200 dark:border-[#1E293B]">
+                    <div class="min-w-0">
+                        <h2 id="document-viewer-title"
+                            x-show="isLoading"
+                            class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                            Membuka dokumen...
+                        </h2>
+                        <h2 x-show="!isLoading"
+                            class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate"
+                            title="">
+                            Dokumen tidak ditemukan
+                        </h2>
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->                    </div>
+                    <div class="flex shrink-0 items-center gap-2">
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                        <button type="button"
+                                @click="close()"
+                                class="p-1.5 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                aria-label="Tutup viewer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-auto bg-stone-50 dark:bg-gray-950">
+                    <div x-show="isLoading"
+                         class="flex flex-col items-center justify-center h-[70vh] p-8 text-center gap-3">
+                        <span class="h-6 w-6 rounded-full border-2 border-stone-400 border-t-transparent animate-spin"></span>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            Membuka dokumen...
+                        </p>
+                    </div>
+
+                    <div x-show="!isLoading">
+                    <!--[if BLOCK]><![endif]-->                        <div class="flex items-center justify-center h-full text-sm text-gray-500 dark:text-gray-400 p-8 text-center">
+                            Dokumen tidak ditemukan atau Anda tidak memiliki izin untuk melihatnya.
+                        </div>
+                    <!--[if ENDBLOCK]><![endif]-->                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    <!-- Livewire Scripts -->
+<script src="livewire.js"   data-csrf="oeYGhMgcjCHOZHYEEYkFVybM3kyGsKU8lhUoMeX8" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+<script src="demo.js"></script></body>
+</html>

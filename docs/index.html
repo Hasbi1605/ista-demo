@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en"
+      x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
+      x-init="$watch('darkMode', value => { localStorage.setItem('theme', value ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', value); })"
+      :class="{ 'dark': darkMode }">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="oeYGhMgcjCHOZHYEEYkFVybM3kyGsKU8lhUoMeX8">
+        <title>ISTA AI</title>
+
+        <link rel="icon" type="image/png" href="images/ista/logo.png">
+
+        <link rel="preload" href="build/assets/inter-latin-400-normal-C38fXH4l.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="build/assets/fraunces-latin-wght-normal-ukD16Tqj.woff2" as="font" type="font/woff2" crossorigin>
+
+        <script>
+            (function () {
+                function applyThemeClass() {
+                    if (localStorage.theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+
+                applyThemeClass();
+                document.addEventListener('livewire:navigated', applyThemeClass);
+            })();
+        </script>
+        <link rel="preload" as="style" href="build/assets/app-BiYcwMRu.css" /><link rel="modulepreload" as="script" href="build/assets/app-BxWRS3jV.js" /><link rel="stylesheet" href="build/assets/app-BiYcwMRu.css" data-navigate-track="reload" /><script type="module" src="build/assets/app-BxWRS3jV.js" data-navigate-track="reload"></script>    <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}[wire\:cloak] {display: none !important;}dialog#livewire-error::backdrop {background-color: rgba(0, 0, 0, .6);}</style>
+</head>
+    <body class="ista-shell ista-display-sans text-stone-800 dark:text-gray-100 transition-colors duration-300">
+        <script>
+    (() => {
+        const suppressStorageKey = 'ista.globalPageLoader.suppressOnce';
+
+        try {
+            if (window.sessionStorage?.getItem(suppressStorageKey) === '1') {
+                document.documentElement.classList.add('suppress-global-page-loader');
+            }
+        } catch (_) {
+            // ignore storage read errors
+        }
+    })();
+</script>
+
+<style>
+    /* Full screen modern animated overlay */
+    #global-page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        /* Muncull sekejap mata untuk memblocking blank screen (Snap IN) */
+        transition: opacity 0.05s ease-out, visibility 0.05s ease-out;
+    }
+    
+    /* Adapt to Dark Mode natively if the `.dark` class is on html/body */
+    html.dark #global-page-loader, .dark #global-page-loader {
+        background-color: #020618;
+    }
+    
+    #global-page-loader.loader-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        /* Menghilang secara elegan memudar pelan pelan (Fade OUT) */
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html.suppress-global-page-loader #global-page-loader {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    
+    /* Smooth Pulse Animation */
+    @keyframes subtlePulse {
+        0%, 100% { transform: scale(1) translateZ(0); opacity: 1; }
+        50% { transform: scale(1.05) translateZ(0); opacity: 0.8; }
+    }
+    .loader-brand {
+        animation: subtlePulse 2s ease-in-out infinite;
+        will-change: transform, opacity;
+    }
+
+    .loader-slow-hint {
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    #global-page-loader.loader-slow .loader-slow-hint {
+        opacity: 1;
+    }
+    
+    /* Gradient Spinner */
+    .loader-spinner {
+        position: absolute;
+        inset: -12px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #4f46e5; /* ISTA Primary Base */
+        border-right-color: #4f46e5;
+        opacity: 0.8;
+        animation: spin 1s linear infinite;
+        will-change: transform;
+    }
+    html.dark .loader-spinner, .dark .loader-spinner {
+        border-top-color: #818cf8;
+        border-right-color: #818cf8;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg) translateZ(0); }
+        100% { transform: rotate(360deg) translateZ(0); }
+    }
+</style>
+
+<div id="global-page-loader" role="status" aria-live="polite" aria-label="Memuat halaman">
+    <div class="relative flex items-center justify-center mb-6">
+        <!-- Spinner Ring -->
+        <div class="loader-spinner"></div>
+        
+        <!-- Center Logo Image -->
+        <div class="h-16 w-16 md:h-20 md:w-20 bg-white/50 dark:bg-black/20 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md border border-gray-100 dark:border-gray-800 loader-brand">
+            <img src="images/ista/logo.png" alt="ISTA AI" class="h-10 w-10 md:h-12 md:w-12 object-contain drop-shadow-md">
+        </div>
+    </div>
+    
+    <!-- Animated Loading Text -->
+    <div class="flex items-center gap-1 text-[13px] md:text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-[0.15em] uppercase">
+        <span>M</span><span>e</span><span>m</span><span>u</span><span>a</span><span>t</span>
+        <span class="inline-flex gap-0.5 ml-1">
+            <span class="animate-bounce [animation-delay:-0.3s] h-1 w-1 bg-current rounded-full"></span>
+            <span class="animate-bounce [animation-delay:-0.15s] h-1 w-1 bg-current rounded-full"></span>
+            <span class="animate-bounce h-1 w-1 bg-current rounded-full"></span>
+        </span>
+    </div>
+    <p class="loader-slow-hint mt-3 max-w-xs text-center text-xs text-gray-500 dark:text-gray-400">Koneksi lebih lambat dari biasanya. Kami masih menyiapkan halaman.</p>
+</div>
+
+<script>
+    (() => {
+        const suppressStorageKey = 'ista.globalPageLoader.suppressOnce';
+
+        const consumeSuppressLoader = () => {
+            if (window.__suppressGlobalPageLoaderOnce === true) {
+                window.__suppressGlobalPageLoaderOnce = false;
+                return true;
+            }
+
+            try {
+                if (window.sessionStorage?.getItem(suppressStorageKey) === '1') {
+                    window.sessionStorage.removeItem(suppressStorageKey);
+                    return true;
+                }
+            } catch (_) {
+                // ignore storage read errors
+            }
+
+            return false;
+        };
+
+        consumeSuppressLoader();
+
+        if (!window.__globalPageLoaderHandlers) {
+            const showLoader = () => {
+                if (consumeSuppressLoader()) {
+                    return;
+                }
+
+                const loaderEl = document.getElementById('global-page-loader');
+                if (loaderEl) {
+                    loaderEl.classList.remove('loader-hidden');
+                    window.clearTimeout(window.__globalPageLoaderSlowTimer);
+                    window.__globalPageLoaderSlowTimer = window.setTimeout(() => loaderEl.classList.add('loader-slow'), 2500);
+                    loaderEl.removeAttribute('aria-hidden');
+                    loaderEl.setAttribute('role', 'status');
+                }
+            };
+
+            const hideLoader = () => {
+                const loaderEl = document.getElementById('global-page-loader');
+                if (loaderEl) {
+                    window.clearTimeout(window.__globalPageLoaderSlowTimer);
+                    loaderEl.classList.remove('loader-slow');
+                    setTimeout(() => {
+                        loaderEl.classList.add('loader-hidden');
+                        loaderEl.setAttribute('aria-hidden', 'true');
+                        loaderEl.removeAttribute('role');
+                        document.documentElement.classList.remove('suppress-global-page-loader');
+                    }, 150);
+                }
+            };
+
+            const onPageShow = (e) => {
+                if (e.persisted) hideLoader();
+            };
+
+            window.__globalPageLoaderHandlers = {
+                showLoader,
+                hideLoader,
+                onPageShow,
+            };
+
+            // Standard page transitions
+            window.addEventListener('beforeunload', showLoader);
+            window.addEventListener('load', hideLoader);
+
+            // Fallback for BFCache (Back/Forward navigation)
+            window.addEventListener('pageshow', onPageShow);
+
+            // Livewire SPA mode support (wire:navigate)
+            document.addEventListener('livewire:navigating', showLoader);
+            document.addEventListener('livewire:navigated', hideLoader);
+        }
+
+        // Safety fallback (force hide after 8 seconds)
+        setTimeout(window.__globalPageLoaderHandlers.hideLoader, 8000);
+    })();
+</script>
+        <div class="relative flex min-h-[var(--app-viewport-height)] flex-col overflow-hidden bg-stone-50/50 transition-colors duration-300 dark:bg-gray-900" style="background-image: radial-gradient(circle at 0 0, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0) 30%), radial-gradient(circle at 100% 100%, rgba(76, 5, 25, 0.08) 0%, rgba(76, 5, 25, 0) 35%), url('/images/ista/dashboard-grid.png'); background-size: auto, auto, 8px 8px;">
+            <div class="pointer-events-none absolute -left-20 -top-20 h-[28rem] w-[28rem] rounded-full bg-amber-100/50 blur-3xl dark:bg-amber-500/5"></div>
+            <div class="pointer-events-none absolute -right-24 top-32 h-[24rem] w-[24rem] rounded-full bg-rose-100/60 blur-3xl dark:bg-ista-primary/10"></div>
+
+            <header class="ista-navbar flex-none">
+                <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-4 sm:px-10">
+                    <a href="index.html" class="group flex items-center gap-3">
+                        <img src="images/ista/logo.png" alt="ISTA AI" class="h-8 w-8 object-contain transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                        <div class="ista-brand-title text-xl text-ista-primary not-italic">ISTA <span class="font-light italic text-ista-gold">AI</span></div>
+                    </a>
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <button type="button" @click="darkMode = !darkMode" class="inline-flex h-10 w-10 items-center justify-center rounded-[10px] text-[#64748B] transition-colors hover:bg-[#F1F5F9] dark:text-gray-300 dark:hover:bg-gray-800" aria-label="Toggle dark mode">
+                            <svg x-show="darkMode === false" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v2.5M12 18.5V21M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M3 12h2.5M18.5 12H21M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8M12 16a4 4 0 100-8 4 4 0 000 8z" />
+                            </svg>
+                            <svg x-show="darkMode === true" style="display: none;" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" />
+                            </svg>
+                        </button>
+                        <div wire:snapshot="{&quot;data&quot;:[],&quot;memo&quot;:{&quot;id&quot;:&quot;sHy2JwQf344MuPt0fprM&quot;,&quot;name&quot;:&quot;dashboard-nav-profile&quot;,&quot;path&quot;:&quot;\/&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;release&quot;:&quot;a-a-a&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;4a0e29fc217d27136e8f4bddb28dbb75951ec264fed0f06ded31f88202753412&quot;}" wire:effects="[]" wire:id="sHy2JwQf344MuPt0fprM" class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
+    <!--[if BLOCK]><![endif]-->    <button @click="open = ! open" class="flex items-center gap-2 rounded-full p-1 transition hover:bg-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ista-primary/50 dark:hover:bg-gray-800" aria-label="Buka menu profil" :aria-expanded="open ? 'true' : 'false'" aria-haspopup="menu" aria-controls="dashboard-profile-menu">
+        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-ista-primary text-sm font-bold text-amber-400">
+            T
+        </div>
+        <div class="hidden items-center gap-1 pr-2 sm:flex">
+            <span class="text-sm font-medium text-stone-600 dark:text-gray-200" x-data="{&quot;name&quot;:&quot;Test User&quot;}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></span>
+            <svg class="h-4 w-4 text-stone-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+    </button>
+
+         <div x-show="open"
+          x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+            id="dashboard-profile-menu"
+            class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-xl border border-stone-100 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 dark:border-gray-800 dark:bg-gray-900" role="menu"
+          style="display: none;">
+        
+        <div class="block border-b border-stone-100 px-4 py-2 dark:border-gray-800 sm:hidden">
+            <p class="truncate text-sm font-medium text-stone-800 dark:text-gray-100">Test User</p>
+            <p class="truncate text-xs text-stone-500 dark:text-gray-400">test@example.com</p>
+        </div>
+
+        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+        <a href="profile.html" class="block px-4 py-2 text-sm text-stone-700 transition hover:bg-stone-50 hover:text-ista-primary dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-amber-300" role="menuitem">
+            Profil
+        </a>
+
+        <button wire:click="logout" class="block w-full border-t border-stone-100 px-4 py-2 text-left text-sm text-stone-700 transition hover:bg-stone-50 hover:text-ista-primary dark:border-gray-800 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-amber-300" role="menuitem">
+            Keluar
+        </button>
+    </div>
+    <!--[if ENDBLOCK]><![endif]--></div>                    </div>
+                </div>
+            </header>
+
+            <div class="pointer-events-none absolute inset-0 overflow-hidden opacity-40">
+                <div class="absolute left-1/4 top-10 h-32 w-32 animate-float rounded-full border border-amber-500/20"></div>
+                <div class="absolute bottom-10 right-1/4 h-40 w-40 rounded-full border-[20px] border-ista-primary/5"></div>
+                <div class="absolute right-12 top-1/2 h-3 w-3 animate-ping rounded-full bg-amber-400"></div>
+                <div class="absolute left-10 top-1/3 grid grid-cols-2 gap-3">
+                    <div class="h-1 w-1 rounded-full bg-stone-300"></div>
+                    <div class="h-1 w-1 rounded-full bg-stone-300"></div>
+                    <div class="h-1 w-1 rounded-full bg-stone-300"></div>
+                    <div class="h-1 w-1 rounded-full bg-stone-300"></div>
+                </div>
+                <svg class="absolute bottom-12 left-1/3 h-32 w-32 -rotate-12 text-ista-primary/5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </div>
+
+            <main class="relative z-10 mx-auto flex min-h-0 flex-1 w-full max-w-7xl items-center px-5 py-12 sm:px-10 lg:py-16">
+                <section class="w-full text-center -translate-y-6 sm:-translate-y-10">
+                    <h1 class="ista-hero-title mt-0 text-stone-900 dark:text-gray-100">Tanya <strong><span class="text-ista-primary">ISTA</span> <span class="font-light italic text-ista-gold">AI</span></strong></h1>
+
+                                        <form action="chat.html" method="GET" class="ista-search-shell">
+                        <input name="q" class="ista-search-input" type="text" placeholder="Tanya apapun..." required>
+                        <button type="submit" class="ista-primary-cta">Mulai bertanya</button>
+                    </form>
+                    
+                                        <div class="mx-auto mt-10 grid grid-cols-1 gap-3 max-w-3xl sm:grid-cols-3">
+                                                <a href="chat.html" wire:navigate class="rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 text-sm font-semibold text-stone-700 transition hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-800 dark:bg-gray-800/80 dark:text-gray-100 dark:hover:border-ista-primary/50">Buka Chat</a>
+                        <a href="chat.html" wire:navigate class="rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 text-sm font-semibold text-stone-700 transition hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-800 dark:bg-gray-800/80 dark:text-gray-100 dark:hover:border-ista-primary/50">Buka Memo</a>
+                                                <a href="chat.html" wire:navigate class="rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 text-sm font-semibold text-stone-700 transition hover:border-ista-primary/30 hover:text-ista-primary dark:border-gray-800 dark:bg-gray-800/80 dark:text-gray-100 dark:hover:border-ista-primary/50">Buka Prompy</a>
+                                                                    </div>
+
+                </section>
+            </main>
+
+            <footer class="relative z-20 flex h-[72px] flex-none flex-col items-center justify-center border-t border-stone-200/80 bg-white/80 backdrop-blur dark:border-[#1E293B]/70 dark:bg-gray-900/80">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-[#78716c] dark:text-[#94A3B8]">Copyright &copy; 2026 Istana Kepresidenan Yogyakarta</p>
+                <p class="mt-1 text-[9px] font-medium uppercase tracking-[0.3em] text-[#a8a29e] dark:text-[#64748B]">All Rights Reserved.</p>
+            </footer>
+        </div>
+    <!-- Livewire Scripts -->
+<script src="livewire.js"   data-csrf="oeYGhMgcjCHOZHYEEYkFVybM3kyGsKU8lhUoMeX8" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+<script src="demo.js"></script></body>
+</html>
